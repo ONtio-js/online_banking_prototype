@@ -29,9 +29,9 @@ void bankActivities()
   struct user user1, user2;
   system("cls");
   printf("enter your email:  ");
-  scanf("%s", &email);
+  scanf("%s", email);
   printf("enter your password:  ");
-  scanf("%s", &password);
+  scanf("%s", password);
   strcpy(filename, email);
   fp = fopen(strcat(filename, ".txt"), "r");
   if (fp == NULL)
@@ -71,7 +71,7 @@ void bankActivities()
           if (amount > user1.balance)
           {
             printf("\ninsufficient balance\n");
-            _beep(500, 700);
+            //_beep(500, 700);
           }
           else
           {
@@ -169,13 +169,13 @@ void bankActivities()
         case 4:
           system("cls");
           printf("enter a recipient email to tansfer the amount ");
-          scanf("%s", &email);
+          scanf("%s", email);
           printf("enter amount: ");
           scanf("%f", &amount);
           if (amount > user1.balance)
           {
             printf("insufficient balance");
-            _beep(500, 700);
+            //_beep(500, 700);
           }
           else
           {
@@ -194,7 +194,7 @@ void bankActivities()
               printf("your current balance : $ %.2f", user1.balance);
               strcpy(filename, user1.email);
               fp = fopen(strcat(filename, ".txt"), "w");
-              fp = fwrite(&user1, sizeof(struct user), 1, fp);
+              fwrite(&user1, sizeof(struct user), 1, fp);
               user1.balance -= amount;
             }
           }
@@ -202,7 +202,7 @@ void bankActivities()
         case 5:
           system("cls");
           printf("enter a recipient phone: ");
-          scanf("%s", &phone);
+          scanf("%s", phone);
           printf("enter amount: ");
           scanf("%f", &amount);
           fp = fopen(filename, "w");
@@ -227,7 +227,7 @@ void bankActivities()
     else
     {
       system("cls");
-      _beep(500, 900);
+     // _beep(500, 900);
       printf("invalid password\n");
       printf("try again......\n");
       printf("\ndo you want to try again..... [y/n]");
@@ -250,13 +250,13 @@ int accountcreation()
   struct user user1, user2;
   system("cls");
   printf("enter your name\t\t\t");
-  scanf("%s", &user1.name);
+  scanf("%s", user1.name);
   printf("enter your email\t\t");
-  scanf("%s", &user1.email);
+  scanf("%s", user1.email);
   printf("enter your phone number:\t");
-  scanf("%s", &user1.phone);
+  scanf("%s", user1.phone);
   printf("enter your new password\t\t");
-  scanf("%s", &user1.password);
+  scanf("%s", user1.password);
   user1.balance = 0;
   strcpy(filename, user1.name);
   fp = fopen(strcat(filename, ".txt"), "w");
