@@ -13,7 +13,7 @@
 //global variable and unions
 struct User
     {
-        char User_id[10];
+        char User_id[20];
          double balance;
          char user_pin[5];
          unsigned long int account;
@@ -90,7 +90,7 @@ int Grant_Access(void)
                 {
                     fread(&User1, sizeof(struct User), 1, fpr);
                     fclose(fpr);
-                    if (!strcmp(pin, User1.user_pin))
+                    if (strcmp(pin, User1.user_pin))
                     {
                         printf("YOUR WELCOME %s\n",User1.User_id);
                         Transaction();
@@ -123,8 +123,7 @@ int Grant_Access(void)
         }
         fread(&User1,sizeof(struct User), 1, fpr);
         fclose(fpr);
-        printf("%s",pin);
-        if (!strcmp(pin,User1.user_pin))
+        if (strcmp(pin,User1.user_pin))
         {
             printf("YOUR WELCOME %s\n",User1.User_id);
             Transaction();
@@ -167,14 +166,14 @@ int Transaction(void)
         {
         case 1:
          displaytime();
-           printf("\t\t%lf\t\t\n",User1.balance);
+           printf("\t\t$%.2lf\t\t\n",User1.balance);
             break;
         case 2:
             printf("CHOOSE YOUR AMOUNT TO WITHDRAW\n");
-            printf("1.=> 5000\n");
-            printf("2.=> 10000\n");
-            printf("3.=> 15000\n");
-            printf("4.=> 20000\n");
+            printf("1.=> $5000\n");
+            printf("2.=> $10000\n");
+            printf("3.=> $15000\n");
+            printf("4.=> $20000\n");
             printf("5.=> OTHERS\n");
             printf("YOUR CHOICE :\t\t");
             scanf("%d",&choice1);
@@ -308,10 +307,11 @@ int Transaction(void)
             User1.balance += amount;
             fpr = fopen(filename, "w");
             fwrite(&User1, sizeof(struct User), 1, fpr);
+            fclose(fpr);
             if (fwrite != NULL)
             {
                 printf("YOU TRANSACTION IS SUCCESSFUL\n");
-                printf("YOUR CURRENT BALANCE: %.2lf\n\n",User1.balance);
+                printf("YOUR CURRENT BALANCE: $%.2lf\n\n",User1.balance);
             }
             else
             {
@@ -329,26 +329,35 @@ int Transaction(void)
             }
             else
             {
-                strcpy(filename,pin);
+                strcpy(filename,User2.User_id);
                 fpr = fopen(strcat(filename, ".txt"), "w");
-                fread(&User2, sizeof(struct User), 1, fpr);
-                fclose(fpr);
-                fpr = fopen(filename, "w");
-                User2.balance += amount;
-                fwrite(&User2, sizeof(struct User), 1, fpr);
-                fclose(fpr);
-                if (fwrite != NULL)
+                if (fpr != NULL)
                 {
-                    printf("YOU TRANSACTION IS SUCCESSFUL\n");
-                    printf("YOU TRANSFERED %d TO %s\n",amount,pin);
-                    User1.balance -= amount;
-                    printf("YOUR ACC. BALANCE :  %lf\n",User1.balance);
-                    strcpy(filename,User1.User_id);
-                    fpr = fopen(strcat(filename, ".txt"), "w");
-                    fwrite(&User1, sizeof(struct User), 1, fpr);
-                    User1.balance -= amount;
+                    fread(&User2, sizeof(struct User), 1, fpr);
                     fclose(fpr);
+                    fpr = fopen(filename, "w");
+                    User2.balance += amount;
+                    fwrite(&User2, sizeof(struct User), 1, fpr);
+                    fclose(fpr);
+                    if (fwrite != NULL)
+                    {
+                        printf("YOU TRANSACTION IS SUCCESSFUL\n");
+                        printf("YOU TRANSFERED $%d TO %s\n",amount,User2.User_id);
+                        User1.balance -= amount;
+                        printf("YOUR ACC. BALANCE :  $%.2lf\n",User1.balance);
+                        strcpy(filename,User1.User_id);
+                        fpr = fopen(strcat(filename, ".txt"), "w");
+                        fwrite(&User1, sizeof(struct User), 1, fpr);
+                        User1.balance -= amount;
+                        fclose(fpr);
+                    }
                 }
+                else
+                {
+                    printf("USER NOT FOUND");
+                    Transaction();
+                }
+          
             }
             break;
         case 5:
