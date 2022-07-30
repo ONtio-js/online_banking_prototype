@@ -8,12 +8,15 @@
  *                              2.transfer
  *                              3.balance enquiry
  *                              4.deposit
+ *                              5.phone recharge
  */
 //global variable and unions
 struct User
     {
         char User_id[10];
          double balance;
+         char user_pin[5];
+         unsigned long int account;
     };
 char filename[50];
 
@@ -21,12 +24,15 @@ char filename[50];
 int Grant_Access(void);
 int Transaction(void);
 int welcome();
+int getAccountNumber();
+char* substr(const char*,int,int);
+int displaytime();
 
 int main()
 {
     char cont = 'y';
     welcome();
-    printf("PROCEED:  [Y/N]");
+    printf("\nPROCEED:  [Y/N]\t\t");
     scanf("%c",&cont);
 
     while (cont == 'y')
@@ -44,40 +50,92 @@ int Grant_Access(void)
 {
     FILE *fpr;
     struct User User1;
-    printf("ENTER YOUR ACCOUNT NUMBER\n");
+    char pin[5];
+    int i;
+    printf("ENTER YOUR NAME \t\t");
     scanf("%s",User1.User_id);
-    User1.balance = 0.00;
-
     strcpy(filename,User1.User_id);
-    fpr = fopen(strcat(filename, ".txt"), "w");
-
-    fwrite(&User1, sizeof(struct User), 1, fpr);
-    fclose(fpr);
-    if (fwrite != NULL)
+    fpr = fopen(strcat(filename, ".txt"), "r");
+    if (fpr == NULL)
     {
-        printf("THIS IS YOUR PIN: %s\n",User1.User_id);
-        char pin[10];
-        printf("ENTER THE PIN TO ACCESS THE MACHINE\n");
-        scanf("%s",pin);
-        strcpy(filename, pin);
-        fpr = fopen(strcat(filename, ".txt"),"r");
-        if (fpr != NULL)
-        {
-            fread(&User1, sizeof(struct User), 1, fpr);
+            printf("\nOPEN AN ACCOUNT  WITH US\n\n");
+            printf("\nENTER YOUR NAME\n");
+            scanf("%s",User1.User_id);
+            User1.balance = 0.00;
+            User1.account = getAccountNumber();
+            strcpy(filename,User1.User_id);
+            fpr = fopen(strcat(filename, ".txt"), "w");
+            fwrite(&User1, sizeof(struct User), 1, fpr);
             fclose(fpr);
-            if (!strcmp(pin, User1.User_id))
+            if (fwrite != NULL)
             {
-                printf("YOUR WELCOME %s\n",User1.User_id);
+                char account[11];
+                sprintf(account,"%lu",User1.account);
+                char* paccess = substr(account,0,4);
+                for (i = 0; i < 5; i++)
+                {
+                    User1.user_pin[i] = *paccess;
+                    paccess++;
+                }
+                
+                printf("THIS IS YOUR PIN: %s\n",User1.user_pin);
+                printf("ENTER THE PIN TO ACCESS THE MACHINE\t\t");
+                for (i = 0; i < 5; i++)
+                {
+                    pin[i] = getchar();
+                }
+                strcpy(filename, User1.User_id);
+                fpr = fopen(strcat(filename, ".txt"),"r");
+                if (fpr != NULL)
+                {
+                    fread(&User1, sizeof(struct User), 1, fpr);
+                    fclose(fpr);
+                    if (!strcmp(pin, User1.user_pin))
+                    {
+                        printf("YOUR WELCOME %s\n",User1.User_id);
+                        Transaction();
+                    }
+                    else
+                    {
+                        printf("INCORRECT PASSWORD\n");
+                    }
+                }
+                else
+                {
+                    printf("INCORRECT PIN\n");
+                    EXIT_FAILURE;
+                }
+
             }
+            else
+            {
+                printf("UNABLE TO REGISTER YOUR ACCOUNT NOW");
+            }
+        
+    }
+    else
+    {
+        
+        printf("ENTER YOUR PIN:\t\t");
+        for (i = 0; i < 5; i++)
+        {
+            pin[i] = getchar();
+        }
+        fread(&User1,sizeof(struct User), 1, fpr);
+        fclose(fpr);
+        printf("%s",pin);
+        if (!strcmp(pin,User1.user_pin))
+        {
+            printf("YOUR WELCOME %s\n",User1.User_id);
+            Transaction();
         }
         else
         {
             printf("INCORRECT PIN\n");
-            EXIT_FAILURE;
         }
-
     }
-    Transaction();
+
+   
   
     
 }
@@ -108,12 +166,8 @@ int Transaction(void)
         switch (choice)
         {
         case 1:
-        //     struct tm* local;
-        //     time_t t = time(NULL);
-        //     local = localtime(&t);
-  
-        //     printf("Local time and date: %s\n",
-        //    asctime(local));
+         displaytime();
+           printf("\t\t%lf\t\t\n",User1.balance);
             break;
         case 2:
             printf("CHOOSE YOUR AMOUNT TO WITHDRAW\n");
@@ -320,15 +374,50 @@ int Transaction(void)
     }
     return (0);
 }
-
+/**
+ * welcome - this welcome the user to the visitor page of the machine before granting access to the secured features of the machine
+ * Return: returns 0 if successful
+ */
 int welcome()
 {
-    printf("WELCOME TO **** BANK\n");
-    // time_t t = time(NULL);
-    // struct tm tm  = *localtime(&t);
+    printf("\n\tWELCOME TO XOXO BANK\t\t\n");
+    time_t tm;
+    time(&tm);
+    printf("\n\t%s\t\n",ctime(&tm));
+    printf("\nA REPUTABLE BANK MADE WITH COMMON PEOPLE IN HEART\n");
+    printf("\nINSERT YOUR CARD FOR TRANSACTIONS\n");
+    return (0);
+}
 
-    // printf("%d-%02d-%02d-%02d-%02d-%02d\n",tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour,tm.tm_min, tm.tm_sec);
-    printf("A REPUTABLE BANK MADE WITH COMMON PEOPLE IN HEART\n");
-    printf("INSERT YOUR CARD FOR TRANSACTIONS\n");
+/**
+ * getAccountNumber - assignes an account number to a new user
+ * Description: this function generate an account number to the first user of the machine as its not connected to a bank that generate an account number, but it will be updated soon;
+ * Return: returns a generated account number when called
+ */
+int getAccountNumber()
+{
+  srand(time(0));
+ unsigned long int accountNumber = rand();
+  return (accountNumber);
+}
+char* substr(const char* src, int m,int n)
+{
+    int len = n - m;
+    char* dest = (char*)malloc(sizeof(char) * (len + 1));
+    int i;
+
+    for(i = m; i < n && (*(src + 1) != '\0'); i++)
+    {
+        *dest = *(src + i);
+        dest++;
+    }
+    *dest = '\0';
+    return (dest - len);
+}
+int displaytime()
+{
+    time_t tm;
+    time(&tm);
+    printf("YOUR ACCOUNT BALANCE AS AT %s\n",ctime(&tm));
     return (0);
 }

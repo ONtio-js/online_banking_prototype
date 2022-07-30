@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include<time.h>
 
 // struct which handles the details of the new customer
 
@@ -10,15 +11,33 @@ struct user
 {
   char name[50];     // name of the customer
   char email[50];    // email of the customer
-  char account[50];  // account number of the customer
+  unsigned long int account;  // account number of the customer
   char phone[50];    // phone number of the customer
   char password[50]; // password tohis/her account
   float balance;     //  account balance of the customer
 };
-int getAccountNumber() // function to generate account number for a new account
-{}
-int changepassword() // function to change password
-{}
+int getAccountNumber(); // function to generate account number for a new account
+int changepassword(); // function to change password
+void bankActivities();
+int accountcreation();
+int main()
+{
+  int option, choice, depositChoice;
+  printf("********************welcome to our bank**************************\n\n");
+  printf("what do you want to do ?\n");
+  printf("1. open an account\n");
+  printf("2. login into an account\n");
+  printf("your choice:\t");
+  scanf("%d", &option);
+  if (option == 1)
+    accountcreation();
+
+  if (option == 2)
+
+    bankActivities();
+
+  return 0;
+}
 void bankActivities()
 {
   int option, choice, depositChoice;
@@ -48,7 +67,7 @@ void bankActivities()
       while (cont == 'y')
       {
         system("cls");
-        printf("**************************** %s welcome to our bank ****************************\n\n", user1.name);
+        printf("**************************** %lu welcome to our bank ****************************\n\n", user1.account);
         printf("press 1: balance inquiry\n");
         printf("press 2: cash withdrawal\n");
         printf("press 3: deposit cash\n");
@@ -258,6 +277,7 @@ int accountcreation()
   printf("enter your new password\t\t");
   scanf("%s", user1.password);
   user1.balance = 0;
+  user1.account = getAccountNumber();
   strcpy(filename, user1.name);
   fp = fopen(strcat(filename, ".txt"), "w");
   fwrite(&user1, sizeof(struct user), 1, fp);
@@ -293,21 +313,9 @@ int accountcreation()
     break;
   }
 }
-int main()
+int getAccountNumber()
 {
-  int option, choice, depositChoice;
-  printf("********************welcome to our bank**************************\n\n");
-  printf("what do you want to do ?\n");
-  printf("1. open an account\n");
-  printf("2. login into an account\n");
-  printf("your choice:\t");
-  scanf("%d", &option);
-  if (option == 1)
-    accountcreation();
-
-  if (option == 2)
-
-    bankActivities();
-
-  return 0;
+  srand(time(0));
+ unsigned long int accountNumber = rand();
+  return (accountNumber);
 }
