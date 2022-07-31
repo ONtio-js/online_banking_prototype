@@ -90,7 +90,7 @@ int Grant_Access(void)
                 {
                     fread(&User1, sizeof(struct User), 1, fpr);
                     fclose(fpr);
-                    if (!strcmp(pin, User1.user_pin))
+                    if (strcmp(pin, User1.user_pin))
                     {
                         printf("YOUR WELCOME %s\n",User1.User_id);
                         Transaction();
@@ -124,7 +124,7 @@ int Grant_Access(void)
         fread(&User1,sizeof(struct User), 1, fpr);
         fclose(fpr);
         printf("%s",pin);
-        if (!strcmp(pin,User1.user_pin))
+        if (strcmp(pin,User1.user_pin))
         {
             printf("YOUR WELCOME %s\n",User1.User_id);
             Transaction();
