@@ -30,13 +30,14 @@ int displaytime();
 
 int main()
 {
-    char cont = 'y';
+    char cont = 'n';
     welcome();
     printf("\nPROCEED:  [Y/N]\t\t");
     scanf("%c",&cont);
-
+    system("clear");
     while (cont == 'y')
     {
+       
         Grant_Access();
     }
 
@@ -69,6 +70,7 @@ int Grant_Access(void)
             fclose(fpr);
             if (fwrite != NULL)
             {
+                system("clear");
                 char account[11];
                 sprintf(account,"%lu",User1.account);
                 char* paccess = substr(account,0,4);
@@ -85,6 +87,10 @@ int Grant_Access(void)
                     pin[i] = getchar();
                 }
                 strcpy(filename, User1.User_id);
+                fpr = fopen(strcat(filename, ".txt"),"w");
+                fwrite(&User1, sizeof(struct User), 1, fpr);
+                fclose(fpr);
+                strcpy(filename, User1.User_id);
                 fpr = fopen(strcat(filename, ".txt"),"r");
                 if (fpr != NULL)
                 {
@@ -92,6 +98,7 @@ int Grant_Access(void)
                     fclose(fpr);
                     if (strcmp(pin, User1.user_pin))
                     {
+                        system("clear");
                         printf("YOUR WELCOME %s\n",User1.User_id);
                         Transaction();
                     }
@@ -125,6 +132,7 @@ int Grant_Access(void)
         fclose(fpr);
         if (strcmp(pin,User1.user_pin))
         {
+            system("clear");
             printf("YOUR WELCOME %s\n",User1.User_id);
             Transaction();
         }
@@ -165,10 +173,12 @@ int Transaction(void)
         switch (choice)
         {
         case 1:
-         displaytime();
+           system("clear");
+            displaytime();
            printf("\t\t$%.2lf\t\t\n",User1.balance);
             break;
         case 2:
+            system("clear");
             printf("CHOOSE YOUR AMOUNT TO WITHDRAW\n");
             printf("1.=> $5000\n");
             printf("2.=> $10000\n");
@@ -180,6 +190,7 @@ int Transaction(void)
             switch (choice1)
             {
             case 1:
+                   system("clear");
                 if (User1.balance >= 5000)
                 {
                     User1.balance -= 5000;
@@ -187,6 +198,7 @@ int Transaction(void)
                     fwrite(&User1, sizeof(struct User), 1, fpr);
                     if (fwrite != NULL)
                     {
+                            system("clear");
                            printf("YOU WITHDRAWAL IS SUCCESSFUL AND YOUR CURRENT ACC. BALANCE IS $%.2lf\n",User1.balance);
                            fclose(fpr);
                     }
@@ -197,12 +209,14 @@ int Transaction(void)
                 }
                 else
                 {
+                    system("clear");
                     printf("INSUFFICIENT BALANCE\n");
 
                 }
             
                 break;
             case 2:
+                system("clear");
                 if (User1.balance >= 10000)
                 {
                     User1.balance -= 10000;
@@ -210,6 +224,7 @@ int Transaction(void)
                     fwrite(&User1, sizeof(struct User), 1, fpr);
                     if (fwrite != NULL)
                     {
+                        system("clear");
                             printf("YOU WITHDRAWAL IS SUCCESSFUL AND YOUR CURRENT ACC. BALANCE IS $%.2lf\n",User1.balance);
                             fclose(fpr);
                     }
@@ -220,12 +235,14 @@ int Transaction(void)
                 }
                 else
                 {
+                    system("clear");
                     printf("INSUFFICIENT BALANCE\n");
 
                 }
             
                 break;
             case 3:
+                system("clear");
                 if (User1.balance >= 15000)
                 {
                     User1.balance -= 15000;
@@ -233,6 +250,7 @@ int Transaction(void)
                     fwrite(&User1, sizeof(struct User), 1, fpr);
                     if (fwrite != NULL)
                     {
+                        system("clear");
                            printf("YOU WITHDRAWAL IS SUCCESSFUL AND YOUR CURRENT ACC. BALANCE IS $%.2lf\n",User1.balance);
                            fclose(fpr);
                     }
@@ -243,12 +261,14 @@ int Transaction(void)
                 }
                 else
                 {
+                    system("clear");
                     printf("INSUFFICIENT BALANCE\n");
 
                 }
             
                 break;
             case 4:
+               system("clear");
                 if (User1.balance >= 20000)
                 {
                     User1.balance -= 20000;
@@ -256,22 +276,26 @@ int Transaction(void)
                     fwrite(&User1, sizeof(struct User), 1, fpr);
                     if (fwrite != NULL)
                     {
+                        system("clear");
                            printf("YOU WITHDRAWAL IS SUCCESSFUL AND YOUR CURRENT ACC. BALANCE IS $%.2lf\n",User1.balance);
                            fclose(fpr);
                     }
                     else
                     {
+                        system("clear");
                         printf("ERROR......CARD SWALLOWED");
                     }
                 }
                 else
                 {
+                    system("clear");
                     printf("INSUFFICIENT BALANCE\n");
 
                 }
             
                 break;
             case 5:
+               system("clear");
                 printf("ENTER YOUR DESIRED AMOUNT:\t\t");
                 scanf("%d",&balance);
                 if (User1.balance >= balance)
@@ -281,6 +305,7 @@ int Transaction(void)
                     fwrite(&User1, sizeof(struct User), 1, fpr);
                     if (fwrite != NULL)
                     {
+                            system("clear");
                            printf("YOU WITHDRAWAL IS SUCCESSFUL AND YOUR CURRENT ACC. BALANCE IS $%.2lf\n",User1.balance);
                            fclose(fpr);
                     }
@@ -291,6 +316,7 @@ int Transaction(void)
                 }
                 else
                 {
+                    system("clear");
                     printf("INSUFFICIENT BALANCE\n");
 
                 }
@@ -302,6 +328,7 @@ int Transaction(void)
             }
             break;
         case 3:
+            system("clear");
             printf("ENTER THE AMOUNT\t\t");
             scanf("%d",&amount);
             User1.balance += amount;
@@ -310,21 +337,25 @@ int Transaction(void)
             fclose(fpr);
             if (fwrite != NULL)
             {
+                system("clear");
                 printf("YOU TRANSACTION IS SUCCESSFUL\n");
                 printf("YOUR CURRENT BALANCE: $%.2lf\n\n",User1.balance);
             }
             else
             {
+                system("clear");
                 printf("UNSUCCEFUL TRANSACTION TRY AGAIN");
             }
             break;
         case 4:
+           system("clear");
             printf("ENTER RECIPIENT ACC. NUMBER:\t\t");
             scanf("%s",pin);
             printf("\nENTER AMOUNT:\t\t\t");
             scanf("%d",&amount);
             if (User1.balance < amount)
             {
+                system("clear");
                 printf("INSUFFICIENT ACCOUNT BALANCE\n");
             }
             else
@@ -341,7 +372,8 @@ int Transaction(void)
                     fclose(fpr);
                     if (fwrite != NULL)
                     {
-                        printf("YOU TRANSACTION IS SUCCESSFUL\n");
+                        system("clear");
+                        printf("YOUR TRANSACTION IS SUCCESSFUL\n");
                         printf("YOU TRANSFERED $%d TO %s\n",amount,User2.User_id);
                         User1.balance -= amount;
                         printf("YOUR ACC. BALANCE :  $%.2lf\n",User1.balance);
@@ -354,6 +386,7 @@ int Transaction(void)
                 }
                 else
                 {
+                    system("clear");
                     printf("USER NOT FOUND");
                     Transaction();
                 }
@@ -361,6 +394,7 @@ int Transaction(void)
             }
             break;
         case 5:
+           system("clear");
           printf("ENTER PHONE NO:\t ");
           scanf("%s", phone);
           printf("ENTER AMOUNT \t: ");
@@ -369,11 +403,14 @@ int Transaction(void)
           fwrite(&User1, sizeof(struct User), 1, fpr);
           User1.balance -= amount;
           fclose(fpr);
+          system("clear");
           printf("YOUR ACCOUNT HAS BEEN DEBITED $%d AND ACCOUNT BALNCE: $%.2lf\n", amount,User1.balance);
           break;
         case 6:
-            welcome();
             cont = 'n';
+            system("clear");
+            welcome();
+           
             break;
         default:
             printf("OUT OF CONTEXT");
